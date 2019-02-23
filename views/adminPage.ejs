@@ -1,0 +1,45 @@
+<%include static.ejs %>
+<div class="maxHeight">
+            <div class="sidePanel">
+                <h2 style="text-align: center; color:white">Update</h2>
+                <form action="/update" method="POST">
+                    <p>Specimen ID</p>
+                    <input  type="text" class="form-control" name="id" id="id" placeholder="Specimen ID" required>
+                    <p>Old Common Name</p>
+                    <input  type="text" class="form-control" name="oCName" id="oCName" placeholder="Old Common Name" required>
+                    <p>New Common Name</p>
+                    <input  type="text" class="form-control" name="nCName" id="nCName" placeholder="New Common Name" required>
+                    <p>Old Scientific Name</p>
+                    <input type="text" class="form-control" name="oSName" id="oSName" placeholder="Old Scientific Name" required>
+                    <p>New Scientific Name</p>
+                    <input  type="text" class="form-control" name="nSName" id="nSName" placeholder="New Scientific Name" required>
+                    <button class="formDropdown">Submit</button>
+                </form>
+            </div>
+            <div class="mainTable">
+                <table style="width:100%" class="table-bordered table">
+                    <thead>
+                        <tr>
+                            <% headers.forEach((heading) => { %>
+                                <th scope="col"><%=heading%></th>
+                            <%})%>
+                            <th scope="col">Photo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <% rows.forEach((row) => { %>
+                                <tr>
+                                    <% headers.forEach((heading) => { %>
+                                        <td><%=row[heading]%></td>
+                                    <%})%>
+                                    <td>
+                                        <img src="http://www.floraofalabama.org/img/specimens/UWAL/UWAL0038097.jpg" style="width:128px;height:128px;">
+                                    </td>
+                                </tr>
+                            <%})%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </body>
+</html>

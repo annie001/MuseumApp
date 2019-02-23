@@ -1,0 +1,61 @@
+<%include static.ejs %>
+<div class="maxHeight">
+            <div class="sidePanel">
+                <h2 style="text-align: center; color:white">Filter</h2>
+                <form action="/submit" method="GET">
+                    <p>Collection</p>
+                    <select class="formDropdown">
+                        <option value="first">first</option>
+                        <option value="last">last</option>
+                    </select>
+                    <p>Specimen Type</p>
+                    <select class="formDropdown">
+                        <option value="all">All</option>
+                        <option value="animal">Animal</option>
+                        <option value="plant">Plant</option>
+                    </select>
+                    <p>Institution</p>
+                    <select class="formDropdown">
+                        <option value="first">first</option>
+                        <option value="last">last</option>
+                    </select>
+                    <p>Collectors</p>
+                    <select class="formDropdown">
+                        <option value="first">first</option>
+                        <option value="last">last</option>
+                    </select>
+                    <p>Habitat</p>
+                    <select class="formDropdown">
+                        <option value="first">first</option>
+                        <option value="last">last</option>
+                    </select>
+                    <button class="formDropdown">Submit</button>
+                </form>
+            </div>
+            <div class="mainTable">
+                <table style="width:100%" class="table-bordered table">
+                    <thead>
+                        <tr>
+                            <% headers.forEach((heading) => { %>
+                                <th scope="col"><%=heading%></th>
+                            <%})%>
+                            <th scope="col">Photo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <% rows.forEach((row) => { %>
+                                <tr>
+                                    <% headers.forEach((heading) => { %>
+                                        <td><%=row[heading]%></td>
+                                    <%})%>
+                                    <td>
+                                        <img src="http://www.floraofalabama.org/img/specimens/UWAL/UWAL0038097.jpg" style="width:128px;height:128px;">
+                                    </td>
+                                </tr>
+                            <%})%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </body>
+</html>
