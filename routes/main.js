@@ -90,9 +90,9 @@ module.exports = {
 
 function getConnection() {
     return mysql.createConnection({
-        host: "localhost",
+        host: "35.197.31.16",
         user: "root",
-        password: "mysql123",
+        password: "cpsc304",
         database: "museum"
     });
 }
