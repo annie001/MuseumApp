@@ -2,7 +2,7 @@
 <div class="maxHeight">
             <div class="sidePanel">
                 <h2 style="text-align: center; color:white">Filter</h2>
-                <form action="/submit" method="GET">
+                <form action="/submit" method="POST">
                     <p>Collection</p>
                     <select class="formDropdown">
                         <option value="first">first</option>
@@ -19,16 +19,21 @@
                         <option value="first">first</option>
                         <option value="last">last</option>
                     </select>
-                    <p>Collectors</p>
-                    <select class="formDropdown">
-                        <option value="first">first</option>
-                        <option value="last">last</option>
-                    </select>
                     <p>Habitat</p>
                     <select class="formDropdown">
                         <option value="first">first</option>
                         <option value="last">last</option>
                     </select>
+                    <div class="checkboxContainer">
+                            <input type="checkbox" name="IDK1" value = "IDK"> ID<br>
+                            <input type="checkbox" name="IDK2" value = "IDK"> ID<br>
+                            <input type="checkbox" name="IDK3" value = "IDK"> ID<br>
+                            <input type="checkbox" name="IDK4" value = "IDK"> ID<br>
+                            <input type="checkbox" name="IDK5" value = "IDK"> ID<br>
+                            <input type="checkbox" name="IDK6" value = "IDK"> ID<br>
+                            <input type="checkbox" name="IDK7" value = "IDK"> ID<br>
+                            <input type="checkbox" name="IDK8" value = "IDK"> ID<br>
+                    </div>
                     <button class="formDropdown">Submit</button>
                 </form>
             </div>
@@ -39,7 +44,6 @@
                             <% headers.forEach((heading) => { %>
                                 <th scope="col"><%=heading%></th>
                             <%})%>
-                            <th scope="col">Photo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,9 +52,6 @@
                                     <% headers.forEach((heading) => { %>
                                         <td><%=row[heading]%></td>
                                     <%})%>
-                                    <td>
-                                        <img src="http://www.floraofalabama.org/img/specimens/UWAL/UWAL0038097.jpg" style="width:128px;height:128px;">
-                                    </td>
                                 </tr>
                             <%})%>
                     </tbody>

@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 app.use("/public", express.static("public"));
 
 // typical user filter search
-app.get("/submit", onSubmit);
+app.post("/submit", onSubmit);
 
 // default main page
 app.get("/",getMain);

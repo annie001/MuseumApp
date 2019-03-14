@@ -28,7 +28,7 @@ h1 {
 .formDropdown {
     margin-right: 50px;
     margin-left: 50px;
-    width: 150px;
+    width: 70%;
     margin-top: 10px;
 }
 
@@ -84,4 +84,8 @@ p {
 .form-control {
     width: 70% !important;
     margin: 0 auto;
+}
+
+.checkboxContainer {
+    margin-left: 25%;
 }

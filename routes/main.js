@@ -3,7 +3,7 @@ const mysql = require("mysql");
 module.exports = {
     getMain: function (req, res) {
         const connection = getConnection();
-        const sql = "SELECT * FROM Name";
+        const sql = "SELECT * FROM Collection";
 
         connection.query(sql, (err, rows, fields) => {
             if (err) {
@@ -24,8 +24,9 @@ module.exports = {
 
     onSubmit: function (req, res) {
         const connection = getConnection();
-        const sql = "SELECT first_name, last_name FROM Name";
-
+        const sql =  "SELECT * FROM Collection";
+        console.log(req);
+        console.log(req.body);
         connection.query(sql, (err, rows, fields) => {
             if (err) {
                 console.log("Failed to query in onSubmit: " + err);
