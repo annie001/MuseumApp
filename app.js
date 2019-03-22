@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
-const {getMain, onSubmit, getAdminPage, onUpdate} = require("./routes/main");
+const {getMain, onSubmit, getAdminPage, onUpdate, onInsert, onDelete} = require("./routes/main");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -19,7 +19,13 @@ app.get("/",getMain);
 app.get("/admin", getAdminPage);
 
 // admin updating
-app.get("/update", onUpdate);
+app.patch("/update", onUpdate);
+
+// admin insertion
+app.post("/insert", onInsert);
+
+// admin deletion
+app.delete("/delete", onDelete);
 
 app.listen(3010, () => {
     console.log("server is running");

@@ -1,12 +1,13 @@
 <%include static.ejs %>
 <div class="maxHeight">
             <div class="sidePanel">
+                <!-- UPDATE -->
                 <h2 style="text-align: center; color:white">Update</h2>
                 <form action="/update" method="POST">
                     <p>Specimen ID</p>
-                    <input  type="text" class="form-control" name="id" id="id" placeholder="Specimen ID" required>
+                    <input  type="text" class="form-control" name="updateSID" id="updateSID" placeholder="Specimen ID" required>
                     <p>Old Common Name</p>
-                    <input  type="text" class="form-control" name="oCName" id="oCName" placeholder="Old Common Name" required>
+                    <input  type="text" class="form-control" name="nCName" id="oCName" placeholder="Old Common Name" required>
                     <p>New Common Name</p>
                     <input  type="text" class="form-control" name="nCName" id="nCName" placeholder="New Common Name" required>
                     <p>Old Scientific Name</p>
@@ -14,6 +15,90 @@
                     <p>New Scientific Name</p>
                     <input  type="text" class="form-control" name="nSName" id="nSName" placeholder="New Scientific Name" required>
                     <button class="formDropdown">Submit</button>
+                </form>
+
+                <!-- INSERT -->
+                <h2 style="text-align: center; color:white">Insert</h2>
+                <form action="/insert" method="POST">
+                    <!-- Backend should generate ID to avoid inputting existing ID and input failure? -->
+                    <p>Specimen ID</p>
+                    <input  type="text" class="form-control" name="insertSID" id="insertSID" placeholder="Specimen ID" required>
+                    <p>Common Name</p>
+                    <input  type="text" class="form-control" name="cName" id="cName" placeholder="Common Name" required>
+                    <p>Scientific Name</p>
+                    <input  type="text" class="form-control" name="sName" id="sName" placeholder="Scientific Name" required>
+                    <p>Collection</p>
+                    <select class="formDropdown">
+                        <option value="first">first</option>
+                        <option value="last">last</option>
+                    </select>
+                    <p>Institution</p>
+                    <select class="formDropdown">
+                        <option value="first">first</option>
+                        <option value="last">last</option>
+                    </select>
+                    <p>Habitat</p>
+                    <select class="formDropdown">
+                        <option value="first">first</option>
+                        <option value="last">last</option>
+                    </select>
+                    <p>Storage</p>
+                    <select class="formDropdown">
+                        <option value="first">first</option>
+                        <option value="last">last</option>
+                    </select>
+
+                    <!-- Animal fields -->
+                    <p>If animal specimen, please fill out:</p>
+                    <div class="checkboxContainer">
+                        <input type="checkbox" name="invertebrate" value = "isInvertebrate"> Invertebrate<br>
+                    </div>
+                    <p>Type of eater</p>
+                    <select class="formDropdown">
+                        <option value="Herbivore">Herbivore</option>
+                        <option value="Carnivore">Carnivore</option>
+                        <option value="Omnivore">Omnivore</option>
+                    </select>
+                    <p>Locomotion</p>
+                    <input  type="text" class="form-control" name="locomotion" id="locomotion" placeholder="Locomotion">
+                    <p>Animal phylum scientific name</p>
+                    <select class="formDropdown">
+                        <option value="Porifera">Porifera</option>
+                        <option value="Cnidaria">Cnidaria</option>
+                        <option value="Platyhelmintha">Platyhelmintha</option>
+                        <option value="Annelida">Annelida</option>
+                        <option value="Mollusca">Mollusca</option>
+                        <option value="Arthropoda">Arthropoda</option>
+                        <option value="Chordata">Chordata</option>
+                        <option value="Fish">Fish</option>
+                        <option value="Amphibian">Amphibian</option>
+                        <option value="Reptiles">Reptiles</option>
+                        <option value="Birds">Birds</option>
+                        <option value="Mammals">Mammals</option>
+                    </select>
+
+                    <!-- Plant fields -->
+                    <p>If plant specimen, please fill out:</p>
+                    <div class="checkboxContainer">
+                        <input type="checkbox" name="leaves" value = "hasLeaves"> Leaves<br>
+                        <input type="checkbox" name="stems" value = "hasStems"> Stems<br>
+                    </div>
+                    <p>Plant phylum scientific name</p>
+                    <select class="formDropdown">
+                        <option value="Bryophyta">Bryophyta</option>
+                        <option value="Filicinophyta">Filicinophyta</option>
+                        <option value="Coniferophyta">Coniferophyta</option>
+                        <option value="Angiospermophyta">Angiospermophyta</option>
+                    </select>
+                    <button class="formDropdown">Insert</button>
+                </form>
+
+                <!-- DELETE -->
+                <h2 style="text-align: center; color:white">Delete</h2>
+                <form action="/delete" method="POST">
+                    <p>Specimen ID</p>
+                    <input  type="text" class="form-control" name="deleteSID" id="deleteSID" placeholder="Specimen ID" required>
+                    <button class="formDropdown">Delete</button>
                 </form>
             </div>
             <div class="mainTable">
