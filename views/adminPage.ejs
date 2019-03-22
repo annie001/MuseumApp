@@ -1,6 +1,6 @@
 <%include static.ejs %>
 <div class="maxHeight">
-            <div class="sidePanel">
+            <div class="sidePanelAdmin">
                 <!-- UPDATE -->
                 <h2 style="text-align: center; color:white">Update</h2>
                 <form action="/update" method="POST">
@@ -47,50 +47,129 @@
                         <option value="first">first</option>
                         <option value="last">last</option>
                     </select>
+                    <p>Specimen Type</p>
+                    <select id="specimenType" class="formDropdown">
+                        <option value="None">None</option>
+                        <option value="Animal">Animal</option>
+                        <option value="Plant">Plant</option>
+                    </select>
+                    <script>
+                        let selectedType = document.getElementById("specimenType").onchange = function (oEvent) {
+                            let element = document.getElementById("specimenType");
+                            let selectedIndex = element.selectedIndex;
+                            let selectedType = element[selectedIndex].value;
+                            let parentElement = document.getElementById("specimenType").parentElement;
+                            if (selectedType === "Animal") {
+                                let plantDiv = document.getElementById("PlantDiv");
+                                if (plantDiv !== null) {
+                                    plantDiv.remove();
+                                }
 
-                    <!-- Animal fields -->
-                    <p>If animal specimen, please fill out:</p>
-                    <div class="checkboxContainer">
-                        <input type="checkbox" name="invertebrate" value = "isInvertebrate"> Invertebrate<br>
-                    </div>
-                    <p>Type of eater</p>
-                    <select class="formDropdown">
-                        <option value="Herbivore">Herbivore</option>
-                        <option value="Carnivore">Carnivore</option>
-                        <option value="Omnivore">Omnivore</option>
-                    </select>
-                    <p>Locomotion</p>
-                    <input  type="text" class="form-control" name="locomotion" id="locomotion" placeholder="Locomotion">
-                    <p>Animal phylum scientific name</p>
-                    <select class="formDropdown">
-                        <option value="Porifera">Porifera</option>
-                        <option value="Cnidaria">Cnidaria</option>
-                        <option value="Platyhelmintha">Platyhelmintha</option>
-                        <option value="Annelida">Annelida</option>
-                        <option value="Mollusca">Mollusca</option>
-                        <option value="Arthropoda">Arthropoda</option>
-                        <option value="Chordata">Chordata</option>
-                        <option value="Fish">Fish</option>
-                        <option value="Amphibian">Amphibian</option>
-                        <option value="Reptiles">Reptiles</option>
-                        <option value="Birds">Birds</option>
-                        <option value="Mammals">Mammals</option>
-                    </select>
+                                let animalDiv = document.createElement("div");
+                                animalDiv.id = "animalDiv";
+                                parentElement.insertBefore(animalDiv, document.getElementById("insertButton"));
 
-                    <!-- Plant fields -->
-                    <p>If plant specimen, please fill out:</p>
-                    <div class="checkboxContainer">
-                        <input type="checkbox" name="leaves" value = "hasLeaves"> Leaves<br>
-                        <input type="checkbox" name="stems" value = "hasStems"> Stems<br>
-                    </div>
-                    <p>Plant phylum scientific name</p>
-                    <select class="formDropdown">
-                        <option value="Bryophyta">Bryophyta</option>
-                        <option value="Filicinophyta">Filicinophyta</option>
-                        <option value="Coniferophyta">Coniferophyta</option>
-                        <option value="Angiospermophyta">Angiospermophyta</option>
-                    </select>
-                    <button class="formDropdown">Insert</button>
+                                let pTypeEater = document.createElement("p");
+                                pTypeEater.appendChild(document.createTextNode("Type of eater"));
+                                animalDiv.appendChild(pTypeEater);
+
+                                // Eater DropDown
+                                let eaters = ["Herbivore", "Carnivore", "Omnivore"];
+                                let sEater = document.createElement("select");
+                                sEater.className = "formDropdown";
+
+                                eaters.forEach((option) => {
+                                    let optElement =  document.createElement("option");
+                                    optElement.value = option;
+                                    optElement.append(document.createTextNode(option));
+                                    sEater.appendChild(optElement);
+                                });
+                                animalDiv.appendChild(sEater);
+
+                                // Locomotion Title
+                                let pLocomotion = document.createElement("p");
+                                pLocomotion.appendChild(document.createTextNode("Locomotion"));
+                                animalDiv.appendChild(pLocomotion);
+
+                                // Locomotion Input box
+                                let iLocomotion = document.createElement("input");
+                                iLocomotion.type = "text";
+                                iLocomotion.className = "form-control";
+                                iLocomotion.id = "locomotion";
+                                iLocomotion.name = "locomotion";
+                                animalDiv.appendChild(iLocomotion);
+
+                                // Phylum Title 
+                                let pPhylum = document.createElement("p");
+                                pPhylum.appendChild(document.createTextNode("Animal phylum scientific name"));
+                                animalDiv.appendChild(pPhylum);
+
+                                // Phylum Dropdown
+                                let phylumOptions = ["Porifera","Cnidaria", "Platyhelmintha",
+                                                    "Annelida", "Mollusca","Arthropoda", "Chordata", "Fish", "Amphibian",
+                                                    "Reptiles", "Birds","Mammals" ];
+
+                                let sPhylum = document.createElement("select");
+                                sPhylum.className = "formDropdown";
+                                phylumOptions.forEach((option) => {
+                                    let optionElement =  document.createElement("option");
+                                    optionElement.value = option;
+                                    optionElement.append(document.createTextNode(option));
+                                    sPhylum.appendChild(optionElement);
+                                });
+                                animalDiv.appendChild(sPhylum);
+
+                            } else {
+                                // Cleanup Animal Div if needed
+                                let animalDiv = document.getElementById("animalDiv");
+                                if (animalDiv !== null) {
+                                    animalDiv.remove();
+                                }
+
+                                let plantDiv = document.createElement("div");
+                                plantDiv.id = "PlantDiv";
+                                parentElement.insertBefore(plantDiv, document.getElementById("insertButton"));
+
+                                // Plant Attribute Checkbox
+                                let dAttribute = document.createElement("div");
+                                dAttribute.className = "checkboxContainer";
+
+                                let iHasLeaves = document.createElement("input");
+                                iHasLeaves.type = "checkbox";
+                                iHasLeaves.name = "leaves";
+                                iHasLeaves.value = "hasLeaves";
+                                dAttribute.appendChild(iHasLeaves);
+                                dAttribute.appendChild(document.createTextNode("Leaves"));
+
+                                let iHasStems = document.createElement("input");
+                                iHasStems.type = "checkbox";
+                                iHasStems.name = "stems";
+                                iHasStems.value = "hasStems";
+                                dAttribute.appendChild(iHasStems);
+                                dAttribute.appendChild(document.createTextNode("Stems"));
+
+                                plantDiv.appendChild(dAttribute);
+
+                                // Scientific Title
+                                let pPlantSci = document.createElement("p");
+                                pPlantSci.appendChild(document.createTextNode("Plant phylum scientific name"));
+                                plantDiv.appendChild(pPlantSci);
+
+                                // Plant Scientific Name DropDown
+                                let plantSciNames = ["Bryophyta", "Filicinophyta", "Coniferophyta", "Angiospermophyta"];
+                                let sPlantSci = document.createElement("select");
+                                sPlantSci.className = "formDropdown";
+                                plantSciNames.forEach(element => {
+                                    let optionElement =  document.createElement("option");
+                                    optionElement.value = element;
+                                    optionElement.append(document.createTextNode(element));
+                                    sPlantSci.appendChild(optionElement);
+                                });
+                                plantDiv.appendChild(sPlantSci);
+                            }
+                        }
+                    </script>
+                    <button id= "insertButton" class="formDropdown">Insert</button>
                 </form>
 
                 <!-- DELETE -->
@@ -108,7 +187,6 @@
                             <% headers.forEach((heading) => { %>
                                 <th scope="col"><%=heading%></th>
                             <%})%>
-                            <th scope="col">Photo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,9 +195,6 @@
                                     <% headers.forEach((heading) => { %>
                                         <td><%=row[heading]%></td>
                                     <%})%>
-                                    <td>
-                                        <img src="http://www.floraofalabama.org/img/specimens/UWAL/UWAL0038097.jpg" style="width:128px;height:128px;">
-                                    </td>
                                 </tr>
                             <%})%>
                     </tbody>

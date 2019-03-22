@@ -18,6 +18,12 @@ h1 {
     height: 100%;
 }
 
+.sidePanelAdmin {
+    background: linear-gradient(180deg,rgb(51, 80, 123) 0%, rgb(107, 119, 208) 48%, rgba(13, 36, 119, 0.93) 100%);
+    width: 20%;
+    float: left;
+}
+
 .mainTable {
     display: inline-block;
     height: 100%;
