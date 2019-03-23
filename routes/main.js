@@ -69,9 +69,7 @@ module.exports = {
         const connection = getConnection();
 
         let id = req.body.updateSID;
-        let oldCommonName = req.body.oCName;
         let newCommonName = req.body.nCName;
-        let oldScientificName = req.body.oSName;
         let newScientificName = req.body.nSName;
 
         const sql = `UPDATE Specimen SET common_name = ${newCommonName}, scientific_name = ${newScientificName} WHERE specimen_ID = ${id} `;
@@ -93,35 +91,21 @@ module.exports = {
     onInsert: function (req, res) {
         const connection = getConnection();
 
-        let id = req.body.insertSID; // randomly generate numbers instead?
-        let commonName = req.body.cName;
-        let scientificName = req.body.sName;
-        let collectionName = req.body.collectionName;
-        let institutionName = req.body.institutionName;
-        let habitatName = req.body.habitatName;
-        let storageRoom = req.body.storageRoom;
-        let storageContainerNumber = req.body.storageContainerNumber;
+        let id = generateSpecimenId();
+        const commonName = req.body.cName;
+        const scientificName = req.body.sName;
+        const collectionName = req.body.collectionName;
+        const institutionName = req.body.institutionName;
+        const habitatName = req.body.habitatName;
+        const storageRoom = req.body.storageRoom;
+        const storageContainerNumber = req.body.storageContainerNumber;
+        const specimenType = req.body.specimenType;
 
-        // animal
-        let invertebrate = req.body.invertebrate;
-        let typeOfEater = req.body.typeOfEater;
-        let locomotion = req.body.locomotion;
-        let animalPhylum = req.body.animalPhylum;
-
-        // plant
-        let leaves = req.body.leaves;
-        let stems = req.body.stems;
-        let plantPhylum = req.body.plantPhylum;
-
-        // none of the animal or plant fields are currently required
-        const isAnimal = !!(invertebrate && typeOfEater && locomotion && animalPhylum);
-
-        let specimenSql = `INSERT INTO Specimen (specimen_id, common_name, scientific_name, collection_name, 
+        const specimenSql = `INSERT INTO Specimen (specimen_id, common_name, scientific_name, collection_name, 
             institution_name, habitat_name, storage_room, storage_container_number) 
             VALUES (${id}, ${commonName}, ${scientificName}, 
                 ${collectionName}, ${institutionName}, ${habitatName}
                 ${storageRoom}, ${storageContainerNumber})`;
-
 
         connection.query(specimenSql, (err, rows, fields) => {
             if (err) {
@@ -135,9 +119,13 @@ module.exports = {
             res.redirect("/admin");
         });
 
-        if (isAnimal) {
-            // insert into Animal_specimen
-            let animalSql = `INSERT INTO Animal_Specimen (specimen_id, invertebrate, type_of_eater, locomotion,
+        if (specimenType === 'Animal') {
+            const invertebrate = req.body.invertebrate;
+            const typeOfEater = req.body.typeOfEater;
+            const locomotion = req.body.locomotion;
+            const animalPhylum = req.body.animalPhylum;
+
+            const animalSql = `INSERT INTO Animal_Specimen (specimen_id, invertebrate, type_of_eater, locomotion,
                 animal_phylum_scientific_name)
                 VALUES (${id}, ${invertebrate}, ${typeOfEater}, ${locomotion}, ${animalPhylum})`;
 
@@ -152,8 +140,11 @@ module.exports = {
                 let header = Object.keys(rows[0]);
                 res.redirect("/admin");
             });
-        } else {
-            // insert into Plant_specimen
+        } else if (specimenType === 'Plant') {
+            let leaves = req.body.leaves;
+            let stems = req.body.stems;
+            let plantPhylum = req.body.plantPhylum;
+
             let plantSql = `INSERT INTO Plant_Specimen (specimen_id, leaves, stems, plant_phylum_scientific_name) 
                 VALUES (${id}, ${leaves}, ${stems}, ${plantPhylum})`;
 
@@ -167,7 +158,9 @@ module.exports = {
                 console.log("onInsert Plant Success");
                 let header = Object.keys(rows[0]);
                 res.redirect("/admin");
-            })
+            });
+        } else { // specimenType === 'None'
+            // do nothing
         }
     },
 
@@ -200,4 +193,8 @@ function getConnection() {
         password: "cpsc304",
         database: "museum"
     });
+}
+
+function generateSpecimenId() {
+    return Math.random().toString(36).substring(2, 7);
 }
