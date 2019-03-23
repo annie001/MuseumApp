@@ -4,35 +4,54 @@
                 <h2 style="text-align: center; color:white">Filter</h2>
                 <form action="/submit" method="POST">
                     <p>Collection</p>
-                    <select class="formDropdown">
-                        <option value="first">first</option>
-                        <option value="last">last</option>
+                    <select name="collectionName" class="formDropdown">
+                            <option value="All">All</option>
+                            <option value="Fish Collection">Fish Collection</option>
+                            <option value="Insect Collection">Insect Collection</option>
+                            <option value="Marine Collection">Marine Collection</option>
+                            <option value="Plant Collection">Plant Collection</option>
+                            <option value="Soil Collection">Soil Collection</option>
                     </select>
                     <p>Specimen Type</p>
                     <select class="formDropdown">
-                        <option value="all">All</option>
-                        <option value="animal">Animal</option>
-                        <option value="plant">Plant</option>
+                        <option value="All">All</option>
+                        <option value="Animal">Animal</option>
+                        <option value="Plant">Plant</option>
                     </select>
                     <p>Institution</p>
-                    <select class="formDropdown">
-                        <option value="first">first</option>
-                        <option value="last">last</option>
+                    <select name="institutionName" class="formDropdown">
+                            <option value="All">All</option>
+                            <option value="SFU">SFU</option>
+                            <option value="UBC">UBC</option>
+                            <option value="UofAlberta">UofAlberta</option>
+                            <option value="UVIC">UVIC</option>
+                            <option value="WWF">WWF</option>
                     </select>
                     <p>Habitat</p>
-                    <select class="formDropdown">
-                        <option value="first">first</option>
-                        <option value="last">last</option>
+                    <select name="habitatName" class="formDropdown">
+                            <option value="All">All</option>
+                            <option value="desert">desert</option>
+                            <option value="freshwater">freshwater</option>
+                            <option value="tropical rainforest">tropical rainforest</option>
+                            <option value="temperate rainforest">temperate rainforest</option>
+                            <option value="tundra">tundra</option>
                     </select>
                     <div class="checkboxContainer">
-                            <input type="checkbox" name="IDK1" value = "IDK"> ID<br>
-                            <input type="checkbox" name="IDK2" value = "IDK"> ID<br>
-                            <input type="checkbox" name="IDK3" value = "IDK"> ID<br>
-                            <input type="checkbox" name="IDK4" value = "IDK"> ID<br>
-                            <input type="checkbox" name="IDK5" value = "IDK"> ID<br>
-                            <input type="checkbox" name="IDK6" value = "IDK"> ID<br>
-                            <input type="checkbox" name="IDK7" value = "IDK"> ID<br>
-                            <input type="checkbox" name="IDK8" value = "IDK"> ID<br>
+                            <input type="checkbox" name="selectSpecimenID" value = "SpecimenID"> SpecimenID<br>
+                            <input type="checkbox" name="selectCommonName" value = "CommonName"> Common Name<br>
+                            <input type="checkbox" name="selectScientificName" value = "ScientificName"> Scientific Name<br>
+                            <input type="checkbox" name="selectInstitution" value = "Institution"> Institution<br>
+                            <input type="checkbox" name="selectInstitutionAddress" value = "InstitutionAddress"> Institution Address<br>
+                            <input type="checkbox" name="selectInstitutionPhone" value = "InstitutionPhone"> Institution Phone<br>
+                            <input type="checkbox" name="selectHabitatName" value = "Habitat"> Habitat<br>
+                            <input type="checkbox" name="selectHabitatRegion" value = "HabitatRegion"> Habitat Region<br>
+                            <input type="checkbox" name="selectRegionAvgPrecip" value = "RegionAvgPrecip"> Region Average Percipitation<br>
+                            <input type="checkbox" name="selectRegionAvgTemp" value = "RegionAvgTemp"> Region Average Temperature<br>
+                            <input type="checkbox" name="selectCollectionName" value = "Collection"> Collection<br>
+                            <input type="checkbox" name="selectCurator" value = "Curator"> Curator<br>
+                            <input type="checkbox" name="selectStorageRoom" value = "StorageRoom"> Storage Room<br>
+                            <input type="checkbox" name="selectStorageContainerNumber" value = "StorageContainerNumber"> Storage Container Number<br>
+                            <input type="checkbox" name="selectPhylum" value = "Phylum"> Phylum<br>
                     </div>
                     <button class="formDropdown">Submit</button>
                 </form>
