@@ -66,13 +66,14 @@ module.exports = {
 
     // TODO
     onUpdate: function (req, res) {
+        console.log("update here");
         const connection = getConnection();
 
         let id = req.body.updateSID;
         let newCommonName = req.body.nCName;
         let newScientificName = req.body.nSName;
 
-        const sql = `UPDATE Specimen SET common_name = ${newCommonName}, scientific_name = ${newScientificName} WHERE specimen_ID = ${id} `;
+        const sql = `UPDATE Specimen SET common_name = '${newCommonName}', scientific_name = '${newScientificName}' WHERE specimen_ID = '${id}'`;
 
         connection.query(sql, (err, rows, fields) => {
             if (err) {
@@ -82,7 +83,6 @@ module.exports = {
             }
 
             console.log("onUpdate Success");
-            let header = Object.keys(rows[0]);
             res.redirect("/admin");
         })
     },

@@ -19,7 +19,7 @@ app.get("/",getMain);
 app.get("/admin", getAdminPage);
 
 // admin updating
-app.patch("/update", onUpdate);
+app.post("/update", onUpdate);
 
 // admin insertion
 app.post("/insert", onInsert);
