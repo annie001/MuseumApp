@@ -25,24 +25,39 @@
                     <p>Scientific Name</p>
                     <input  type="text" class="form-control" name="sName" id="sName" placeholder="Scientific Name" required>
                     <p>Collection</p>
-                    <select class="formDropdown">
-                        <option value="first">first</option>
-                        <option value="last">last</option>
+                    <select name="collectionName" class="formDropdown">
+                        <option value="Fish Collection">Fish Collection</option>
+                        <option value="Insect Collection">Insect Collection</option>
+                        <option value="Marine Collection">Marine Collection</option>
+                        <option value="Plant Collection">Plant Collection</option>
+                        <option value="Soil Collection">Soil Collection</option>
                     </select>
                     <p>Institution</p>
-                    <select class="formDropdown">
-                        <option value="first">first</option>
-                        <option value="last">last</option>
+                    <select name="institutionName" class="formDropdown">
+                        <option value="SFU">SFU</option>
+                        <option value="UBC">UBC</option>
+                        <option value="UofAlberta">UofAlberta</option>
+                        <option value="UVIC">UVIC</option>
+                        <option value="WWF">WWF</option>
                     </select>
                     <p>Habitat</p>
-                    <select class="formDropdown">
-                        <option value="first">first</option>
-                        <option value="last">last</option>
+                    <select name="habitatName" class="formDropdown">
+                        <option value="desert">desert</option>
+                        <option value="freshwater">freshwater</option>
+                        <option value="tropical rainforest">tropical rainforest</option>
+                        <option value="temperate rainforest">temperate rainforest</option>
+                        <option value="tundra">tundra</option>
                     </select>
                     <p>Storage</p>
-                    <select class="formDropdown">
-                        <option value="first">first</option>
-                        <option value="last">last</option>
+                    <select id="storageRoom" name="storageRoom" class="formDropdown">
+                        <option value="Bella Coola">Bella Coola</option>
+                        <option value="Nanaimo">Nanaimo</option>
+                        <option value="Okanagan">Okanagan</option>
+                        <option value="Squamish">Squamish</option>
+                        <option value="Tofino">Tofino</option>
+                    </select>
+                    <p>Storage</p>
+                    <select id="storageContainerNumber" name="storageContainerNumber" class="formDropdown">
                     </select>
                     <p>Specimen Type</p>
                     <select id="specimenType" class="formDropdown">
@@ -51,6 +66,35 @@
                         <option value="Plant">Plant</option>
                     </select>
                     <script>
+                        // Handle Storage Container Numbers
+                        document.getElementById("storageRoom").onchange = function (oEvent) {
+                            let keyVal = {
+                                "Bella Coola": [12, 13],
+                                "Nanaimo": [16, 91],
+                                "Okanagan": [20, 56],
+                                "Squamish": [10, 34],
+                                "Tofino": [70, 78]
+                            };
+                            
+                            // remove old elements
+                            let storageNumDropDown = document.getElementById("storageContainerNumber");
+                            while (storageNumDropDown.options[0]) {
+                                storageNumDropDown.options[0].remove();
+                            }
+
+                            let element = document.getElementById("storageRoom");
+                            let selectedIndex = element.selectedIndex;
+                            let selectedStorageRoom = element[selectedIndex].value;
+                            let options = keyVal[selectedStorageRoom];
+
+                            options.forEach(option => {
+                                let optElement =  document.createElement("option");
+                                optElement.value = option;
+                                optElement.append(document.createTextNode(option));
+                                storageNumDropDown.appendChild(optElement);
+                            });
+                        };
+                        // Handle Dynamic DropDown for Specimen
                         let selectedType = document.getElementById("specimenType").onchange = function (oEvent) {
                             let element = document.getElementById("specimenType");
                             let selectedIndex = element.selectedIndex;
@@ -74,6 +118,7 @@
                                 let eaters = ["Herbivore", "Carnivore", "Omnivore"];
                                 let sEater = document.createElement("select");
                                 sEater.className = "formDropdown";
+                                sEater.name = "typeOfEater";
 
                                 eaters.forEach((option) => {
                                     let optElement =  document.createElement("option");
@@ -108,6 +153,7 @@
 
                                 let sPhylum = document.createElement("select");
                                 sPhylum.className = "formDropdown";
+                                sPhylum.name = "animalPhylum";
                                 phylumOptions.forEach((option) => {
                                     let optionElement =  document.createElement("option");
                                     optionElement.value = option;
@@ -155,6 +201,7 @@
                                 // Plant Scientific Name DropDown
                                 let plantSciNames = ["Bryophyta", "Filicinophyta", "Coniferophyta", "Angiospermophyta"];
                                 let sPlantSci = document.createElement("select");
+                                sPlantSci.name = "plantPhylum";
                                 sPlantSci.className = "formDropdown";
                                 plantSciNames.forEach(element => {
                                     let optionElement =  document.createElement("option");
