@@ -98,7 +98,7 @@ module.exports = {
                         scientific_name = '${newScientificName}' 
                     WHERE specimen_ID = '${id}'`;
 
-        queryDb(connection, sql, "Specimen", "Update", res, function() {
+        queryDb(connection, sql, "Update", "Specimen", res, function() {
             res.redirect("/admin");
         });
     },
