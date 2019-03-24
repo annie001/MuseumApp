@@ -135,9 +135,9 @@ INSERT INTO Plant_Phylum (plant_phylum_scientific_name, reproduction, vasculariz
 /*-------------Plant Specimen--------------*/
 CREATE TABLE Plant_Specimen(
         	Specimen_ID  CHAR(20) Primary Key,
-        	Leaves BIT,
-        	Roots BIT,
-        	Stems BIT,
+        	Leaves TINYINT(1),
+        	Roots TINYINT(1),
+        	Stems TINYINT(1),
         	Plant_phylum_scientific_name  CHAR(50) NOT NULL,
         	FOREIGN KEY (Specimen_ID) REFERENCES Specimen(specimen_ID)
 ON DELETE CASCADE
@@ -161,7 +161,7 @@ INSERT INTO Animal_Phylum (animal_phylum_scientific_name, reproduction, body_des
 /*------------Animal Specimen------------*/
 CREATE TABLE Animal_Specimen (
         	Specimen_ID CHAR(20) Primary Key,
-        	invertebrate BIT,
+        	invertebrate TINYINT(1),
         	type_of_eater  CHAR(20),
         	locomotion  CHAR(20),
         	animal_phylum_scientific_name CHAR(50) NOT NULL,
