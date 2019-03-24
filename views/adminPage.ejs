@@ -1,6 +1,8 @@
 <%include static.ejs %>
 <div class="maxHeight">
             <div class="sidePanelAdmin">
+                <!-- Waiting for report endpoint-->
+                <button class="formDropdown">Report Generator</button>
                 <!-- UPDATE -->
                 <h2 style="text-align: center; color:white">Update</h2>
                 <form action="/update" method="POST">
@@ -36,6 +38,8 @@
                         <option value="UVIC">UVIC</option>
                         <option value="WWF">WWF</option>
                     </select>
+                    <p>Date Collected</p>
+                    <input  type="text" class="form-control" name="dateCollected" id="dateCollected" placeholder="YYYY-MM-DD" required>
                     <p>Habitat</p>
                     <select name="habitatName" class="formDropdown">
                         <option value="desert">desert</option>
@@ -106,6 +110,19 @@
                                 animalDiv.id = "animalDiv";
                                 parentElement.insertBefore(animalDiv, document.getElementById("insertButton"));
 
+                                // Invertebrate Checkbox
+                                let dInvertebrate = document.createElement("div");
+                                dInvertebrate.className = "checkboxContainer";
+
+                                let iInvertebrate = document.createElement("input");
+                                iInvertebrate.type = "checkbox";
+                                iInvertebrate.name = "invertebrate";
+                                iInvertebrate.value = "isInvertebrate";
+                                dInvertebrate.appendChild(iInvertebrate);
+                                dInvertebrate.appendChild(document.createTextNode("Invertebrate"));
+                                animalDiv.appendChild(dInvertebrate);
+
+                                // Eater Title
                                 let pTypeEater = document.createElement("p");
                                 pTypeEater.appendChild(document.createTextNode("Type of eater"));
                                 animalDiv.appendChild(pTypeEater);
@@ -143,9 +160,8 @@
                                 animalDiv.appendChild(pPhylum);
 
                                 // Phylum Dropdown
-                                let phylumOptions = ["Porifera","Cnidaria", "Platyhelmintha",
-                                                    "Annelida", "Mollusca","Arthropoda", "Chordata", "Fish", "Amphibian",
-                                                    "Reptiles", "Birds","Mammals" ];
+                                let phylumOptions = ["kinorhyncha","Mollusca", "platyhelminthes",
+                                                    "Priapulida", "Sipuncula"];
 
                                 let sPhylum = document.createElement("select");
                                 sPhylum.className = "formDropdown";
@@ -180,6 +196,13 @@
                                 dAttribute.appendChild(iHasLeaves);
                                 dAttribute.appendChild(document.createTextNode("Leaves"));
 
+                                let iHasRoots = document.createElement("input");
+                                iHasRoots.type = "checkbox";
+                                iHasRoots.name = "roots";
+                                iHasRoots.value = "hasRoots";
+                                dAttribute.appendChild(iHasRoots);
+                                dAttribute.appendChild(document.createTextNode("Roots"));
+
                                 let iHasStems = document.createElement("input");
                                 iHasStems.type = "checkbox";
                                 iHasStems.name = "stems";
@@ -195,7 +218,7 @@
                                 plantDiv.appendChild(pPlantSci);
 
                                 // Plant Scientific Name DropDown
-                                let plantSciNames = ["Bryophyta", "Filicinophyta", "Coniferophyta", "Angiospermophyta"];
+                                let plantSciNames = ["Antheocerotophyta", "Charophyta", "Ginkophyta", "Gnetophyta", "Lycopodiophyta"];
                                 let sPlantSci = document.createElement("select");
                                 sPlantSci.name = "plantPhylum";
                                 sPlantSci.className = "formDropdown";

@@ -19,13 +19,13 @@ app.get("/",getMain);
 app.get("/admin", getAdminPage);
 
 // admin updating
-app.patch("/update", onUpdate);
+app.post("/update", onUpdate);
 
 // admin insertion
 app.post("/insert", onInsert);
 
 // admin deletion
-app.delete("/delete", onDelete);
+app.post("/delete", onDelete);
 
 app.listen(3010, () => {
     console.log("server is running");

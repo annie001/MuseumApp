@@ -23,16 +23,19 @@ module.exports = {
     },
 
     onSubmit: function (req, res) {
+        // TODO: If user input is "All"
         const connection = getConnection();
         const sql =  "SELECT * FROM Specimen";
-        const collection = req.body.collection;
-        const sType = req.body.sType;
-        const habitat = req.body.habitat;
-        const institution = req.body.institution;
+        const collection = req.body.collectionName;
+        //const sType = req.body.sType;
+        const habitat = req.body.habitatName;
+        const institution = req.body.institutionName;
         const query = `select * from Specimen 
                         where collection_name = '${collection}' 
                         and habitat_name = '${habitat}' 
                         and institution_name = '${institution}'`;
+        //TODO: checkbox fields
+        console.log(query);
         connection.query(query, (err, rows, fields) => {
             if (err) {
                 console.log("Failed to query in onSubmit: " + err);
@@ -79,7 +82,6 @@ module.exports = {
         })
     },
 
-    // TODO
     onUpdate: function (req, res) {
         const connection = getConnection();
 
@@ -87,7 +89,7 @@ module.exports = {
         let newCommonName = req.body.nCName;
         let newScientificName = req.body.nSName;
 
-        const sql = `UPDATE Specimen SET common_name = ${newCommonName}, scientific_name = ${newScientificName} WHERE specimen_ID = ${id} `;
+        const sql = `UPDATE Specimen SET common_name = '${newCommonName}', scientific_name = '${newScientificName}' WHERE specimen_ID = '${id}'`;
 
         connection.query(sql, (err, rows, fields) => {
             if (err) {
@@ -97,12 +99,11 @@ module.exports = {
             }
 
             console.log("onUpdate Success");
-            let header = Object.keys(rows[0]);
             res.redirect("/admin");
         })
     },
 
-    // TODO
+    // WIP
     onInsert: function (req, res) {
         const connection = getConnection();
 
@@ -110,6 +111,7 @@ module.exports = {
         const commonName = req.body.cName;
         const scientificName = req.body.sName;
         const collectionName = req.body.collectionName;
+        const dateCollected = req.body.dateCollected;
         const institutionName = req.body.institutionName;
         const habitatName = req.body.habitatName;
         const storageRoom = req.body.storageRoom;
@@ -117,10 +119,10 @@ module.exports = {
         const specimenType = req.body.specimenType;
 
         const specimenSql = `INSERT INTO Specimen (specimen_id, common_name, scientific_name, collection_name, 
-            institution_name, habitat_name, storage_room, storage_container_number) 
-            VALUES (${id}, ${commonName}, ${scientificName}, 
-                ${collectionName}, ${institutionName}, ${habitatName}
-                ${storageRoom}, ${storageContainerNumber})`;
+            institution_name, date_collected, habitat_name, storage_room, storage_container_number) 
+            VALUES ('${id}', '${commonName}', '${scientificName}', 
+                '${collectionName}', '${institutionName}', '${dateCollected}', 
+                '${habitatName}', '${storageRoom}', '${storageContainerNumber}')`;
 
         connection.query(specimenSql, (err, rows, fields) => {
             if (err) {
@@ -130,19 +132,20 @@ module.exports = {
             }
 
             console.log("onInsert Specimen Success");
-            let header = Object.keys(rows[0]);
             res.redirect("/admin");
         });
 
         if (specimenType === 'Animal') {
-            const invertebrate = req.body.invertebrate;
+            console.log("invertebrate ", req.body.invertebrate);
+            const invertebrate = req.body.invertebrate ? 1 : 0;
+            console.log(invertebrate);
             const typeOfEater = req.body.typeOfEater;
             const locomotion = req.body.locomotion;
             const animalPhylum = req.body.animalPhylum;
 
             const animalSql = `INSERT INTO Animal_Specimen (specimen_id, invertebrate, type_of_eater, locomotion,
                 animal_phylum_scientific_name)
-                VALUES (${id}, ${invertebrate}, ${typeOfEater}, ${locomotion}, ${animalPhylum})`;
+                VALUES ('${id}', '${invertebrate}', '${typeOfEater}', '${locomotion}', '${animalPhylum}')`;
 
             connection.query(animalSql, (err, rows, fields) => {
                 if (err) {
@@ -152,16 +155,18 @@ module.exports = {
                 }
     
                 console.log("onInsert Animal Success");
-                let header = Object.keys(rows[0]);
+                // let header = Object.keys(rows[0]);
                 res.redirect("/admin");
             });
         } else if (specimenType === 'Plant') {
-            let leaves = req.body.leaves;
-            let stems = req.body.stems;
+            let leaves = req.body.leaves ? 1 : 0;
+            let stems = req.body.stems ? 1 : 0;
+            let roots = req.body.roots ? 1 : 0;
             let plantPhylum = req.body.plantPhylum;
 
-            let plantSql = `INSERT INTO Plant_Specimen (specimen_id, leaves, stems, plant_phylum_scientific_name) 
-                VALUES (${id}, ${leaves}, ${stems}, ${plantPhylum})`;
+
+            let plantSql = `INSERT INTO Plant_Specimen (specimen_id, leaves, roots, stems, plant_phylum_scientific_name) 
+                VALUES ('${id}', '${leaves}', '${roots}', '${stems}', '${plantPhylum}')`;
 
             connection.query(plantSql, (err, rows, fields) => {
                 if (err) {
@@ -171,21 +176,19 @@ module.exports = {
                 }
     
                 console.log("onInsert Plant Success");
-                let header = Object.keys(rows[0]);
                 res.redirect("/admin");
             });
         } else { // specimenType === 'None'
             // do nothing
-        }
+        };
     },
 
-    // TODO
     onDelete: function (req, res) {
         const connection = getConnection();
 
-        let id = req.body.deleteSID;
+        const id = req.body.deleteSID;
 
-        const sql = `DELETE from Specimen WHERE specimen_ID = ${id} `;
+        const sql = `DELETE from Specimen WHERE specimen_ID = '${id}'`;
 
         connection.query(sql, (err, rows, fields) => {
             if (err) {
@@ -195,7 +198,6 @@ module.exports = {
             }
 
             console.log("onDelete Success");
-            let header = Object.keys(rows[0]);
             res.redirect("/admin");
         })
     }
