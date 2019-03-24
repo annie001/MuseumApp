@@ -25,7 +25,7 @@ app.post("/update", onUpdate);
 app.post("/insert", onInsert);
 
 // admin deletion
-app.delete("/delete", onDelete);
+app.post("/delete", onDelete);
 
 app.listen(3010, () => {
     console.log("server is running");
