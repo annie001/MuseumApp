@@ -63,7 +63,7 @@ module.exports = {
 
     getAdminPage: function (req, res) {
         const connection = getConnection();
-        const sql = "SELECT * FROM Specimen"; // default since admin can only modify specimen
+        const sql = "SELECT * FROM Specimen"; // default
 
         connection.query(sql, (err, rows, fields) => {
             if (err) {
@@ -103,11 +103,10 @@ module.exports = {
         })
     },
 
-    // WIP
     onInsert: function (req, res) {
         const connection = getConnection();
 
-        let id = generateSpecimenId();
+        const id = generateSpecimenId();
         const commonName = req.body.cName;
         const scientificName = req.body.sName;
         const collectionName = req.body.collectionName;
@@ -122,7 +121,7 @@ module.exports = {
             institution_name, date_collected, habitat_name, storage_room, storage_container_number) 
             VALUES ('${id}', '${commonName}', '${scientificName}', 
                 '${collectionName}', '${institutionName}', '${dateCollected}', 
-                '${habitatName}', '${storageRoom}', '${storageContainerNumber}')`;
+                '${habitatName}', '${storageRoom}', ${storageContainerNumber})`;
 
         connection.query(specimenSql, (err, rows, fields) => {
             if (err) {
@@ -132,20 +131,17 @@ module.exports = {
             }
 
             console.log("onInsert Specimen Success");
-            res.redirect("/admin");
         });
 
         if (specimenType === 'Animal') {
-            console.log("invertebrate ", req.body.invertebrate);
-            const invertebrate = req.body.invertebrate ? 1 : 0;
-            console.log(invertebrate);
+            const invertebrate = !!(req.body.invertebrate);
             const typeOfEater = req.body.typeOfEater;
             const locomotion = req.body.locomotion;
             const animalPhylum = req.body.animalPhylum;
 
             const animalSql = `INSERT INTO Animal_Specimen (specimen_id, invertebrate, type_of_eater, locomotion,
                 animal_phylum_scientific_name)
-                VALUES ('${id}', '${invertebrate}', '${typeOfEater}', '${locomotion}', '${animalPhylum}')`;
+                VALUES ('${id}', ${invertebrate}, '${typeOfEater}', '${locomotion}', '${animalPhylum}')`;
 
             connection.query(animalSql, (err, rows, fields) => {
                 if (err) {
@@ -155,18 +151,17 @@ module.exports = {
                 }
     
                 console.log("onInsert Animal Success");
-                // let header = Object.keys(rows[0]);
                 res.redirect("/admin");
             });
         } else if (specimenType === 'Plant') {
-            let leaves = req.body.leaves ? 1 : 0;
-            let stems = req.body.stems ? 1 : 0;
-            let roots = req.body.roots ? 1 : 0;
-            let plantPhylum = req.body.plantPhylum;
+            const leaves = !!(req.body.leaves);
+            const roots = !!(req.body.roots);
+            const stems = !!(req.body.stems);
+            const plantPhylum = req.body.plantPhylum;
 
 
-            let plantSql = `INSERT INTO Plant_Specimen (specimen_id, leaves, roots, stems, plant_phylum_scientific_name) 
-                VALUES ('${id}', '${leaves}', '${roots}', '${stems}', '${plantPhylum}')`;
+            const plantSql = `INSERT INTO Plant_Specimen (specimen_id, leaves, roots, stems, plant_phylum_scientific_name) 
+                VALUES ('${id}', ${leaves}, ${roots}, ${stems}, '${plantPhylum}')`;
 
             connection.query(plantSql, (err, rows, fields) => {
                 if (err) {
@@ -178,7 +173,7 @@ module.exports = {
                 console.log("onInsert Plant Success");
                 res.redirect("/admin");
             });
-        } else { // specimenType === 'None'
+        } else { // don't need else block but just to clarify to do nothing for specimenType === 'None'
             // do nothing
         };
     },
