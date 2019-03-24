@@ -25,9 +25,15 @@ module.exports = {
     onSubmit: function (req, res) {
         const connection = getConnection();
         const sql =  "SELECT * FROM Specimen";
-        console.log(req);
-        console.log(req.body);
-        connection.query(sql, (err, rows, fields) => {
+        const collection = req.body.collection;
+        const sType = req.body.sType;
+        const habitat = req.body.habitat;
+        const institution = req.body.institution;
+        const query = `select * from Specimen 
+                        where collection_name = '${collection}' 
+                        and habitat_name = '${habitat}' 
+                        and institution_name = '${institution}'`;
+        connection.query(query, (err, rows, fields) => {
             if (err) {
                 console.log("Failed to query in onSubmit: " + err);
                 res.sendStatus(500);
@@ -35,11 +41,20 @@ module.exports = {
             }
 
             console.log("onSubmit Success");
-            let header = Object.keys(rows[0]);
-            res.render('index.ejs', {
-                headers: header,
-                rows
-            });
+            if (rows[0] != null){
+
+                let header = Object.keys(rows[0]);
+                res.render('index.ejs', {
+                    headers: header,
+                    rows
+                });
+            } else {
+                res.render('index.ejs', {
+                    headers: [],
+                    rows
+                });
+            }
+            
         })
     },
 

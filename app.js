@@ -3,7 +3,7 @@ const app = express()
 const bodyParser = require('body-parser');
 const {getMain, onSubmit, getAdminPage, onUpdate, onInsert, onDelete} = require("./routes/main");
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set('views', './views');
 app.set('view engine', 'ejs');
