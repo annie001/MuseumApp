@@ -23,17 +23,21 @@ module.exports = {
     },
 
     onSubmit: function (req, res) {
-        // TODO: If user input is "All"
         const connection = getConnection();
         const sql =  "SELECT * FROM Specimen";
-        const collection = req.body.collectionName;
+        const collection = req.body.collectionName == 'All'? '(select collection_name from Collection)' :`('${req.body.collectionName}')`;
         //const sType = req.body.sType;
-        const habitat = req.body.habitatName;
-        const institution = req.body.institutionName;
-        const query = `select * from Specimen 
-                        where collection_name = '${collection}' 
-                        and habitat_name = '${habitat}' 
-                        and institution_name = '${institution}'`;
+        var type = 'Specimen';
+        if (req.body.specimenType == 'Animal') type = 'Animal_Specimen';
+        if (req.body.specimenType == 'Plant') type = 'Plant_Specimen';
+        const habitat = req.body.habitatName == 'All'? '(select habitat_name from Habitat)':`('${req.body.habitatName}')`;
+        //const habitat_query = `select * from Specimen where habitat_name in ${habitat}`;
+        const institution = req.body.institutionName == 'All'? '(select institution_name from Institution)' : `('${req.body.institutionName}')`;
+        const query = `select * from Specimen
+                        where collection_name in ${collection}
+                        and habitat_name in ${habitat}
+                        and institution_name in ${institution}
+                        and specimen_ID in (select specimen_ID from ${type})`;
         //TODO: checkbox fields
         console.log(query);
         connection.query(query, (err, rows, fields) => {
