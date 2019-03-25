@@ -199,6 +199,11 @@ function downloadRegionsContainingSpecimen (csvStr) {
 
     return new Promise((resolve, reject) => {
         connection.query(sql, (err, rows, fields) => {
+            rows.forEach((row, i) => {
+                console.log(rows[i].regionName.toString());
+                rows[i].regionName = '"' + rows[i].regionName + '"';
+            });
+            console.log("going to add to csv now");
             let ret = addDataToCsv (regionsContainingSpecimenHeaders, rows, regionsContainingSpecimenKeys,
                 csvStr, regionsContainingSpecimenTitle);
             resolve(ret);
