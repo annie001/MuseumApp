@@ -79,7 +79,7 @@ module.exports = {
     getReport: async function (req, res) {
         let csvStr = '';
         let dateToAppend = getDateToBeAppended();
-        downloadCollectionInfo()
+        downloadCollectionInfo(csvStr)
             .then((csvStr) => {
                 return downloadInstitutionInfo(csvStr);
             })
