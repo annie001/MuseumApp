@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const {getMain, onSubmit, getAdminPage, onUpdate, onInsert, onDelete} = require("./routes/main");
+const {getReport} = require("./routes/report");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,6 +27,9 @@ app.post("/insert", onInsert);
 
 // admin deletion
 app.post("/delete", onDelete);
+
+// csv download
+app.get("/report", getReport);
 
 app.listen(3010, () => {
     console.log("server is running");
