@@ -137,22 +137,18 @@ module.exports = {
     onUpdate: function (req, res) {
         const connection = getConnection();
 
-        let id = req.body.updateSID;
-        let newCommonName = req.body.nCName;
-        let newScientificName = req.body.nSName;
+        const id = req.body.updateSID;
+        const newCommonName = req.body.nCName;
+        const newScientificName = req.body.nSName;
 
-        const sql = `UPDATE Specimen SET common_name = '${newCommonName}', scientific_name = '${newScientificName}' WHERE specimen_ID = '${id}'`;
+        const sql = `UPDATE Specimen 
+                    SET common_name = '${newCommonName}',
+                        scientific_name = '${newScientificName}' 
+                    WHERE specimen_ID = '${id}'`;
 
-        connection.query(sql, (err, rows, fields) => {
-            if (err) {
-                console.log("Failed to query in onUpdate: " + err);
-                res.sendStatus(500);
-                return;
-            }
-
-            console.log("onUpdate Success");
+        queryDb(connection, sql, "Update", "Specimen", res, function() {
             res.redirect("/admin");
-        })
+        });
     },
 
     onInsert: function (req, res) {
@@ -169,65 +165,45 @@ module.exports = {
         const storageContainerNumber = req.body.storageContainerNumber;
         const specimenType = req.body.specimenType;
 
-        const specimenSql = `INSERT INTO Specimen (specimen_id, common_name, scientific_name, collection_name, 
-            institution_name, date_collected, habitat_name, storage_room, storage_container_number) 
+        const specimenSql = `INSERT INTO Specimen 
+            (specimen_id, common_name, scientific_name, 
+            collection_name, institution_name, date_collected,
+            habitat_name, storage_room, storage_container_number) 
             VALUES ('${id}', '${commonName}', '${scientificName}', 
-                '${collectionName}', '${institutionName}', '${dateCollected}', 
-                '${habitatName}', '${storageRoom}', ${storageContainerNumber})`;
+                    '${collectionName}', '${institutionName}', '${dateCollected}', 
+                    '${habitatName}', '${storageRoom}', ${storageContainerNumber})`;
 
-        connection.query(specimenSql, (err, rows, fields) => {
-            if (err) {
-                console.log("Failed to query in onInsert Specimen: " + err);
-                res.sendStatus(500);
-                return;
+        queryDb(connection, specimenSql, "Insert", "Specimen", res, function() {
+            if (specimenType === 'Animal') {
+                const invertebrate = !!(req.body.invertebrate);
+                const typeOfEater = req.body.typeOfEater;
+                const locomotion = req.body.locomotion;
+                const animalPhylum = req.body.animalPhylum;
+    
+                const animalSql = `INSERT INTO Animal_Specimen 
+                    (specimen_id, invertebrate, type_of_eater, 
+                    locomotion, animal_phylum_scientific_name)
+                    VALUES ('${id}', ${invertebrate}, '${typeOfEater}',
+                            '${locomotion}', '${animalPhylum}')`;
+    
+                queryDb(connection, animalSql, "Insert", "Animal_Specimen", res);
+            } else if (specimenType === 'Plant') {
+                const leaves = !!(req.body.leaves);
+                const roots = !!(req.body.roots);
+                const stems = !!(req.body.stems);
+                const plantPhylum = req.body.plantPhylum;
+    
+                const plantSql = `INSERT INTO Plant_Specimen 
+                    (specimen_id, leaves, roots, stems, 
+                    plant_phylum_scientific_name) 
+                    VALUES ('${id}', ${leaves}, ${roots}, ${stems},
+                            '${plantPhylum}')`;
+    
+                queryDb(connection, plantSql, "Insert", "Plant_Specimen", res);
             }
-
-            console.log("onInsert Specimen Success");
+    
+            res.redirect("/admin");
         });
-
-        if (specimenType === 'Animal') {
-            const invertebrate = !!(req.body.invertebrate);
-            const typeOfEater = req.body.typeOfEater;
-            const locomotion = req.body.locomotion;
-            const animalPhylum = req.body.animalPhylum;
-
-            const animalSql = `INSERT INTO Animal_Specimen (specimen_id, invertebrate, type_of_eater, locomotion,
-                animal_phylum_scientific_name)
-                VALUES ('${id}', ${invertebrate}, '${typeOfEater}', '${locomotion}', '${animalPhylum}')`;
-
-            connection.query(animalSql, (err, rows, fields) => {
-                if (err) {
-                    console.log("Failed to query in onInsert Animal: " + err);
-                    res.sendStatus(500);
-                    return;
-                }
-    
-                console.log("onInsert Animal Success");
-                res.redirect("/admin");
-            });
-        } else if (specimenType === 'Plant') {
-            const leaves = !!(req.body.leaves);
-            const roots = !!(req.body.roots);
-            const stems = !!(req.body.stems);
-            const plantPhylum = req.body.plantPhylum;
-
-
-            const plantSql = `INSERT INTO Plant_Specimen (specimen_id, leaves, roots, stems, plant_phylum_scientific_name) 
-                VALUES ('${id}', ${leaves}, ${roots}, ${stems}, '${plantPhylum}')`;
-
-            connection.query(plantSql, (err, rows, fields) => {
-                if (err) {
-                    console.log("Failed to query in onInsert Plant: " + err);
-                    res.sendStatus(500);
-                    return;
-                }
-    
-                console.log("onInsert Plant Success");
-                res.redirect("/admin");
-            });
-        } else { // don't need else block but just to clarify to do nothing for specimenType === 'None'
-            // do nothing
-        };
     },
 
     onDelete: function (req, res) {
@@ -237,16 +213,9 @@ module.exports = {
 
         const sql = `DELETE from Specimen WHERE specimen_ID = '${id}'`;
 
-        connection.query(sql, (err, rows, fields) => {
-            if (err) {
-                console.log("Failed to query in onDelete: " + err);
-                res.sendStatus(500);
-                return;
-            }
-
-            console.log("onDelete Success");
+        queryDb(connection, sql, "Delete", "Specimen", res, function() {
             res.redirect("/admin");
-        })
+        });
     }
 };
 
@@ -261,4 +230,21 @@ function getConnection() {
 
 function generateSpecimenId() {
     return Math.random().toString(36).substring(2, 7);
+}
+
+function queryDb(connection, sql, operation, tableName, res, callback) {
+    connection.query(sql, (err, rows, fields) => {
+        if (err) {
+            const errMsg = `Failed to ${operation} for ${tableName} table: ${err}`;
+            console.log(errMsg);
+            res.status(500).send(errMsg);
+            return;
+        }
+
+        console.log(`on${operation} ${tableName} Success`);
+
+        if (callback) {
+            return callback();
+        }
+    });
 }

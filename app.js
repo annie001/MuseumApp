@@ -1,5 +1,5 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 const {getMain, onSubmit, getAdminPage, onUpdate, onInsert, onDelete} = require("./routes/main");
 
@@ -13,12 +13,12 @@ app.use("/public", express.static("public"));
 app.post("/submit", onSubmit);
 
 // default main page
-app.get("/",getMain);
+app.get("/", getMain);
 
 // admin page 
 app.get("/admin", getAdminPage);
 
-// admin updating
+// admin update
 app.post("/update", onUpdate);
 
 // admin insertion
