@@ -13,7 +13,7 @@ let collectionInfoQuery = `
     ORDER BY avgPrecipitation DESC, avgTemp
     `;
 let collectionInfoHeaders = "Collection Name, Total Specimen, Average Precipitation (mm), Average Temperature (c)";
-let collectionInfoKeys = ["collectionName", "avgPrecipitation", "avgPrecipitation", "avgTemp"];
+let collectionInfoKeys = ["collectionName", "totalSpecimen", "avgPrecipitation", "avgTemp"];
 let collectionInfoTitle = "Statistics For Each Collection";
 
 
