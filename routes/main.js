@@ -24,65 +24,21 @@ module.exports = {
 
     onSubmit: function (req, res) {
         const connection = getConnection();
-        // read from dropdowns
+        const sql =  "SELECT * FROM Specimen";
         const collection = req.body.collectionName == 'All'? '(select collection_name from Collection)' :`('${req.body.collectionName}')`;
-        const habitat = req.body.habitatName == 'All'? '(select habitat_name from Habitat)':`('${req.body.habitatName}')`;
-        const institution = req.body.institutionName == 'All'? '(select institution_name from Institution)' : `('${req.body.institutionName}')`;
+        //const sType = req.body.sType;
         var type = 'Specimen';
         if (req.body.specimenType == 'Animal') type = 'Animal_Specimen';
         if (req.body.specimenType == 'Plant') type = 'Plant_Specimen';
-
+        const habitat = req.body.habitatName == 'All'? '(select habitat_name from Habitat)':`('${req.body.habitatName}')`;
+        //const habitat_query = `select * from Specimen where habitat_name in ${habitat}`;
+        const institution = req.body.institutionName == 'All'? '(select institution_name from Institution)' : `('${req.body.institutionName}')`;
+        const query = `select * from Specimen
+                        where collection_name in ${collection}
+                        and habitat_name in ${habitat}
+                        and institution_name in ${institution}
+                        and specimen_ID in (select specimen_ID from ${type})`;
         //TODO: checkbox fields
-        // read from checkboxes
-        var cols = '';
-        //fields from Specimen table
-        cols += req.body.selectSpecimenID? ', s.specimen_ID' : '';
-        cols += req.body.selectCommonName? ', s.Common_name' : '';
-        cols += req.body.selectScientificName? ', s.Scientific_name' : '';
-        cols += req.body.selectCollectionName? ', s.Collection_name' : '';
-        cols += req.body.selectStorageRoom? ', s.Storage_room' : '';
-        cols += req.body.selectStorageContainerNum? ', s.Storage_container_number' : '';
-        //institution info
-        cols += req.body.selectInstitution? ', s.Institution_name' : '';
-        cols += req.body.selectInstitutionAddress? ', i.address Institution_address' : '';
-        //habitat info
-        cols += req.body.selectHabitatName? ', s.Habitat_name' : '';
-        cols += req.body.selectHabitatRegion? ', r.region' : '';
-        //region
-        cols += req.body.selectRegionAvgPrecip? ', r.average_precip_mm' : '';
-        cols += req.body.selectRegionAvgTemp? ', r.average_temp_c' : '';
-        // collection
-        cols += req.body.selectCurator? ', c.curator' : '';
-        // phylum
-        cols += req.body.selectPhylum? ', p.phylum' : '';
-        
-        cols = cols.substring(1, cols.length);
-
-        //create a view for all phylums
-        const all_phylum_view = 'create view all_phylum(Specimen_ID, phylum)'+
-            ' as (select Specimen_ID, animal_phylum_scientific_name as phylum from Animal_Specimen) '+
-            'union (select Specimen_ID, plant_phylum_scientific_name as phylum from Plant_Specimen);';
-        connection.query(all_phylum_view, (err, rows, fields) => {
-            if (err) {
-                console.log("Failed to create phylum view: " + err);
-                res.sendStatus(500);
-                return;
-            }
-            console.log("phylum view created");
-        });
-
-        // query the database with user inputs
-        const query = `select ${cols} from Specimen s, Habitat h, Institution i, Region r, Collection c, all_phylum p
-                        where s.Institution_name = i.Institution_name
-                        and s.Habitat_name = h.Habitat_name
-                        and h.region = r.region
-                        and s.Collection_name = c.collection_name
-                        and p.Specimen_ID = s.Specimen_ID
-                        and s.collection_name in ${collection}
-                        and s.habitat_name in ${habitat}
-                        and s.institution_name in ${institution}
-                        and s.specimen_ID in (select specimen_ID from ${type})`;
-        
         console.log(query);
         connection.query(query, (err, rows, fields) => {
             if (err) {
@@ -107,10 +63,6 @@ module.exports = {
             }
             
         })
-
-        // drop the phylum view 
-        const drop = 'drop view all_phylum;'
-        connection.query(drop);
     },
 
     getAdminPage: function (req, res) {
